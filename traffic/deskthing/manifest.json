@@ -1,0 +1,19 @@
+{
+  "id": "traffic-thing",
+  "isWebApp": true,
+  "requires": [],
+  "label": "Traffic",
+  "version": "1.0.0",
+  "version_code": 1.0,
+  "compatible_server": [11],
+  "compatible_client": [11],
+  "description": "Real-time commute times for your routes via TomTom",
+  "author": "Charles",
+  "platforms": ["windows", "mac", "linux"],
+  "homepage": "",
+  "repository": "",
+  "tags": [],
+  "requiredVersions": { "server": ">=0.11.0", "client": ">=0.11.0" },
+  "updateUrl": "",
+  "template": "base"
+}

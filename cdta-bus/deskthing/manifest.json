@@ -1,0 +1,19 @@
+{
+  "id": "cdta-bus",
+  "isWebApp": true,
+  "requires": [],
+  "label": "CDTA Bus",
+  "version": "1.0.0",
+  "version_code": 1.0,
+  "compatible_server": [11],
+  "compatible_client": [11],
+  "description": "Real-time CDTA bus arrivals for your stops via 511NY API",
+  "author": "Charles",
+  "platforms": ["windows", "mac", "linux"],
+  "homepage": "",
+  "repository": "",
+  "tags": [],
+  "requiredVersions": { "server": ">=0.11.0", "client": ">=0.11.0" },
+  "updateUrl": "",
+  "template": "base"
+}

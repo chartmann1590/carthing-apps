@@ -1,0 +1,19 @@
+{
+  "id": "gas-prices",
+  "isWebApp": true,
+  "requires": [],
+  "label": "Gas Prices",
+  "version": "1.0.0",
+  "version_code": 1.0,
+  "compatible_server": [11],
+  "compatible_client": [11],
+  "description": "NY State gas prices (regular, midgrade, premium) via EIA API",
+  "author": "Charles",
+  "platforms": ["windows", "mac", "linux"],
+  "homepage": "",
+  "repository": "",
+  "tags": [],
+  "requiredVersions": { "server": ">=0.11.0", "client": ">=0.11.0" },
+  "updateUrl": "",
+  "template": "base"
+}

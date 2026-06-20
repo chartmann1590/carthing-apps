@@ -1,0 +1,26 @@
+button {
+  background: transparent;
+  background-color: transparent;
+  border: none;
+}
+button:focus {
+  outline: none;
+  border: none;
+}
+button:active {
+  outline: none;
+  border: none;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+}
+
+.duration-400 {
+  transition-duration: 400ms;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
