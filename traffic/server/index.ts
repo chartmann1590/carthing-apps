@@ -6,6 +6,8 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 let refreshTimer: ReturnType<typeof setInterval> | null = null;
 let currentRoutes: Route[] = [];
+let isRefreshing = false;
+let started = false;
 
 async function getConfig(): Promise<{ apiKey: string; routes: RouteConfig[] }> {
   const settings = await DeskThing.getSettings();
@@ -25,17 +27,26 @@ async function getConfig(): Promise<{ apiKey: string; routes: RouteConfig[] }> {
 }
 
 async function refresh(): Promise<void> {
-  const { apiKey, routes } = await getConfig();
-  if (!apiKey || routes.length === 0) {
-    console.log('[traffic] No API key or routes configured');
-    return;
+  if (isRefreshing) return;
+  isRefreshing = true;
+  try {
+    const { apiKey, routes } = await getConfig();
+    if (!apiKey || routes.length === 0) {
+      console.log('[traffic] No API key or routes configured');
+      return;
+    }
+    console.log(`[traffic] Fetching ${routes.length} route(s)...`);
+    currentRoutes = await fetchAllRoutes(apiKey, routes);
+    DeskThing.send({ type: 'traffic', payload: currentRoutes });
+  } finally {
+    isRefreshing = false;
   }
-  console.log(`[traffic] Fetching ${routes.length} route(s)...`);
-  currentRoutes = await fetchAllRoutes(apiKey, routes);
-  DeskThing.send({ type: 'traffic', payload: currentRoutes });
 }
 
 const start = async () => {
+  if (started) return;
+  started = true;
+
   const settings: AppSettings = {
     tomtom_key: {
       id: 'tomtom_key',
@@ -89,33 +100,31 @@ const start = async () => {
   };
 
   DeskThing.initSettings(settings);
-
-  DeskThing.on(DESKTHING_EVENTS.SETTINGS, async () => {
-    await refresh();
-  });
-
-  DeskThing.on(DESKTHING_EVENTS.CLIENT_STATUS, (data) => {
-    if (data.request === 'connected' || data.request === 'opened') {
-      if (currentRoutes.length > 0) DeskThing.send({ type: 'traffic', payload: currentRoutes });
-    }
-  });
-
-  DeskThing.on('get', (data) => {
-    if (data.request === 'traffic') {
-      DeskThing.send({ type: 'traffic', payload: currentRoutes });
-    }
-  });
-
   await refresh();
   refreshTimer = setInterval(refresh, REFRESH_INTERVAL_MS);
 };
 
 const stop = async () => {
+  started = false;
   if (refreshTimer !== null) {
     clearInterval(refreshTimer);
     refreshTimer = null;
   }
 };
+
+DeskThing.on(DESKTHING_EVENTS.SETTINGS, () => { refresh(); });
+
+DeskThing.on(DESKTHING_EVENTS.CLIENT_STATUS, (data) => {
+  if (data.request === 'connected' || data.request === 'opened') {
+    if (currentRoutes.length > 0) DeskThing.send({ type: 'traffic', payload: currentRoutes });
+  }
+});
+
+DeskThing.on('get', (data) => {
+  if (data.request === 'traffic') {
+    DeskThing.send({ type: 'traffic', payload: currentRoutes });
+  }
+});
 
 DeskThing.on(DESKTHING_EVENTS.START, start);
 DeskThing.on(DESKTHING_EVENTS.STOP, stop);

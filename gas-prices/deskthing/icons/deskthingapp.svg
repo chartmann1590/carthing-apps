@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="16" fill="#1a1a2e"/>
+  <!-- Gas pump body -->
+  <rect x="22" y="35" width="36" height="42" rx="3" fill="#f59e0b"/>
+  <rect x="28" y="41" width="24" height="14" rx="2" fill="#1a1a2e" opacity="0.6"/>
+  <!-- Pump handle/nozzle -->
+  <rect x="58" y="30" width="6" height="28" rx="3" fill="#f59e0b"/>
+  <rect x="58" y="44" width="16" height="6" rx="3" fill="#f59e0b"/>
+  <!-- Price text lines -->
+  <rect x="26" y="62" width="22" height="4" rx="2" fill="#ffffff" opacity="0.9"/>
+  <rect x="26" y="70" width="16" height="4" rx="2" fill="#ffffff" opacity="0.5"/>
+</svg>

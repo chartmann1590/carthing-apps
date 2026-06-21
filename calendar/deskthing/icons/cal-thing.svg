@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="16" fill="#1a1a2e"/>
+  <!-- Calendar body -->
+  <rect x="15" y="28" width="70" height="58" rx="5" fill="#3b82f6"/>
+  <!-- Calendar header -->
+  <rect x="15" y="28" width="70" height="18" rx="5" fill="#1d4ed8"/>
+  <rect x="15" y="38" width="70" height="8" fill="#1d4ed8"/>
+  <!-- Binding pegs -->
+  <rect x="30" y="22" width="6" height="14" rx="3" fill="#93c5fd"/>
+  <rect x="64" y="22" width="6" height="14" rx="3" fill="#93c5fd"/>
+  <!-- Grid dots -->
+  <rect x="24" y="54" width="8" height="6" rx="1" fill="#ffffff" opacity="0.9"/>
+  <rect x="38" y="54" width="8" height="6" rx="1" fill="#ffffff" opacity="0.9"/>
+  <rect x="52" y="54" width="8" height="6" rx="1" fill="#ffffff" opacity="0.9"/>
+  <rect x="66" y="54" width="8" height="6" rx="1" fill="#ffffff" opacity="0.9"/>
+  <rect x="24" y="66" width="8" height="6" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="38" y="66" width="8" height="6" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="52" y="66" width="8" height="6" rx="1" fill="#bfdbfe" opacity="0.9"/>
+  <rect x="66" y="66" width="8" height="6" rx="1" fill="#ffffff" opacity="0.5"/>
+</svg>

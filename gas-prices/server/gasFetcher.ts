@@ -17,7 +17,7 @@ async function fetchProduct(apiKey: string, product: string): Promise<number[]> 
       `https://api.eia.gov/v2/petroleum/pri/gnd/data/` +
       `?api_key=${encodeURIComponent(apiKey)}` +
       `&frequency=weekly&data[]=value` +
-      `&facets[area][]=NY&facets[product][]=${product}` +
+      `&facets[duoarea][]=SNY&facets[product][]=${product}` +
       `&sort[0][column]=period&sort[0][direction]=desc&length=2`;
     const resp = await fetch(url, { signal: AbortSignal.timeout(10000) });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);

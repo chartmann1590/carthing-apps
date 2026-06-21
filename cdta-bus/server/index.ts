@@ -6,6 +6,8 @@ const REFRESH_INTERVAL_MS = 60 * 1000;
 
 let refreshTimer: ReturnType<typeof setInterval> | null = null;
 let currentStops: StopArrival[] = [];
+let isRefreshing = false;
+let started = false;
 
 async function getConfig(): Promise<{ apiKey: string; stops: Array<{ id: string; name: string }> }> {
   const settings = await DeskThing.getSettings();
@@ -22,16 +24,25 @@ async function getConfig(): Promise<{ apiKey: string; stops: Array<{ id: string;
 }
 
 async function refresh(): Promise<void> {
-  const { apiKey, stops } = await getConfig();
-  if (!apiKey || stops.every((s) => !s.id)) {
-    console.log('[bus] No API key or stop IDs configured');
-    return;
+  if (isRefreshing) return;
+  isRefreshing = true;
+  try {
+    const { apiKey, stops } = await getConfig();
+    if (!apiKey || stops.every((s) => !s.id)) {
+      console.log('[bus] No API key or stop IDs configured');
+      return;
+    }
+    currentStops = await fetchAllStops(apiKey, stops);
+    DeskThing.send({ type: 'bus', payload: currentStops });
+  } finally {
+    isRefreshing = false;
   }
-  currentStops = await fetchAllStops(apiKey, stops);
-  DeskThing.send({ type: 'bus', payload: currentStops });
 }
 
 const start = async () => {
+  if (started) return;
+  started = true;
+
   const settings: AppSettings = {
     api_511_key: {
       id: 'api_511_key',
@@ -85,33 +96,31 @@ const start = async () => {
   };
 
   DeskThing.initSettings(settings);
-
-  DeskThing.on(DESKTHING_EVENTS.SETTINGS, async () => {
-    await refresh();
-  });
-
-  DeskThing.on(DESKTHING_EVENTS.CLIENT_STATUS, (data) => {
-    if (data.request === 'connected' || data.request === 'opened') {
-      DeskThing.send({ type: 'bus', payload: currentStops });
-    }
-  });
-
-  DeskThing.on('get', (data) => {
-    if (data.request === 'bus') {
-      DeskThing.send({ type: 'bus', payload: currentStops });
-    }
-  });
-
   await refresh();
   refreshTimer = setInterval(refresh, REFRESH_INTERVAL_MS);
 };
 
 const stop = async () => {
+  started = false;
   if (refreshTimer !== null) {
     clearInterval(refreshTimer);
     refreshTimer = null;
   }
 };
+
+DeskThing.on(DESKTHING_EVENTS.SETTINGS, () => { refresh(); });
+
+DeskThing.on(DESKTHING_EVENTS.CLIENT_STATUS, (data) => {
+  if (data.request === 'connected' || data.request === 'opened') {
+    DeskThing.send({ type: 'bus', payload: currentStops });
+  }
+});
+
+DeskThing.on('get', (data) => {
+  if (data.request === 'bus') {
+    DeskThing.send({ type: 'bus', payload: currentStops });
+  }
+});
 
 DeskThing.on(DESKTHING_EVENTS.START, start);
 DeskThing.on(DESKTHING_EVENTS.STOP, stop);
