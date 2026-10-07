@@ -36,5 +36,10 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^8.3.3"
+  },
+  "overrides": {
+    "tsm": {
+      "esbuild": "^0.25.12"
+    }
   }
 }
